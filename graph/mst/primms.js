@@ -1,3 +1,43 @@
+let minCostConnectPoints = function (points) {
+  const n = points.length
+  const heap = new Heap((a, b) => a[0] < b[0]) // Min-heap
+  const inMST = new Array(n).fill(false)
+  const mstEdges = [] // Stores MST edges
+
+  heap.push([0, 0, -1]) // [weight, current node, parent node]
+  let mstCost = 0
+  let edgesUsed = 0
+
+  while (edgesUsed < n) {
+    let [weight, currNode, parent] = heap.peek()
+    heap.pop()
+
+    if (inMST[currNode]) {
+      continue
+    }
+
+    inMST[currNode] = true
+    mstCost += weight
+    edgesUsed++
+
+    if (parent !== -1) {
+      mstEdges.push([parent, currNode, weight])
+    }
+
+    for (let nextNode = 0; nextNode < n; nextNode++) {
+      if (!inMST[nextNode]) {
+        let nextWeight =
+          Math.abs(points[currNode][0] - points[nextNode][0]) +
+          Math.abs(points[currNode][1] - points[nextNode][1])
+
+        heap.push([nextWeight, nextNode, currNode])
+      }
+    }
+  }
+
+  return { mstCost, mstEdges }
+}
+
 class Heap {
   constructor(comparator = (a, b) => a < b) {
     this.heap = []
@@ -93,33 +133,4 @@ class Heap {
       this.siftDown(i)
     }
   }
-}
-
-const heap = new Heap()
-heap.buildHeap([15, 12, 50, 7, 40, 22])
-// heap.push(15)
-// heap.push(12)
-// heap.push(50)
-// heap.push(7)
-// heap.push(40)
-// heap.push(22)
-
-while (!heap.isEmpty()) {
-  console.log(heap.pop())
-}
-
-// -------------------------------------------------------------------
-
-var findKthLargest = function (nums, k) {
-  const minHeap = new Heap()
-
-  for (let num of nums) {
-    minHeap.push(num)
-
-    if (minHeap.size() > k) {
-      minHeap.pop()
-    }
-  }
-
-  return minHeap.peek()
 }
