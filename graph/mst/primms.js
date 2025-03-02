@@ -38,6 +38,36 @@ let minCostConnectPoints = function (points) {
   return { mstCost, mstEdges }
 }
 
+// -----------------------------------------------------------------
+
+function primsAlgorithm(edges) {
+  const heap = new Heap((a, b) => a[2] < b[2]) // Min heap based on edge weight
+  const initialEdges = edges[0].map((edge) => [0, edge[0], edge[1]])
+  heap.buildHeap(initialEdges)
+
+  const mst = edges.map(() => [])
+  const visited = new Set()
+  visited.add(0)
+
+  while (!heap.isEmpty()) {
+    const [vertex, discoveredVertex, distance] = heap.pop()
+
+    if (!visited.has(discoveredVertex)) {
+      visited.add(discoveredVertex)
+      mst[vertex].push([discoveredVertex, distance])
+      mst[discoveredVertex].push([vertex, distance])
+
+      for (const [neighbor, neighborDistance] of edges[discoveredVertex]) {
+        if (!visited.has(neighbor)) {
+          heap.push([discoveredVertex, neighbor, neighborDistance])
+        }
+      }
+    }
+  }
+
+  return mst
+}
+
 class Heap {
   constructor(comparator = (a, b) => a < b) {
     this.heap = []
