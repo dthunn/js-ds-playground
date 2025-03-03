@@ -46,3 +46,12 @@ function diameterOfBST(root) {
   height(root) // Start the height calculation
   return diameter
 }
+
+function findHeight(root) {
+  if (!root) return -1 // Return -1 if considering edges, 0 if considering nodes
+
+  let leftHeight = findHeight(root.left)
+  let rightHeight = findHeight(root.right)
+
+  return 1 + Math.max(leftHeight, rightHeight)
+}
