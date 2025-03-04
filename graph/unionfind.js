@@ -1,7 +1,7 @@
 class UnionFind {
   constructor(size) {
-    this.group = new Uint32Array(size).fill(0)
-    this.rank = new Uint32Array(size).fill(0)
+    this.group = new Array(size).fill(0)
+    this.rank = new Array(size).fill(0)
     this.count = size
 
     for (let i = 0; i < size; ++i) {
