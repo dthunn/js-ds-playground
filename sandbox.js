@@ -1,14 +1,43 @@
-const fib = function (n) {
-  const result = [0, 1]
+class UnionFind {
+  constructor(size) {
+    this.group = new Array(size).fill(0)
+    this.rank = new Array(size).fill(0)
+    this.count = size
 
-  for (let i = 2; i <= n; i++) {
-    const a = result[i - 1]
-    const b = result[i - 2]
-
-    result.push(a + b)
+    for (let i = 0; i < size; i++) {
+      this.group[i] = i
+    }
   }
 
-  return result[n]
-}
+  find(node) {
+    if (this.group[node] !== node) {
+      this.group[node] = this.find(this.group[node])
+    }
 
-console.log(fib(7))
+    return this.group[node]
+  }
+
+  union(node1, node2) {
+    const group1 = this.find(node1)
+    const group2 = this.find(node2)
+
+    if (group1 === group2) return false
+
+    if (this.rank[group1] > this.rank[group2]) {
+      this.group[group2] = group1
+    } else if (this.rank[group1] < this.rank[group2]) {
+      this.group[group1] = group2
+    } else {
+      this.group[group1] = group2
+      this.rank[group2]++
+    }
+
+    this.count--
+
+    return true
+  }
+
+  connected(x, y) {
+    return this.find(x) === this.find(y)
+  }
+}

@@ -2,9 +2,9 @@ class UnionFind {
   constructor(size) {
     this.group = new Array(size).fill(0)
     this.rank = new Array(size).fill(0)
-    this.count = size
+    this.size = size
 
-    for (let i = 0; i < size; ++i) {
+    for (let i = 0; i < size; i++) {
       this.group[i] = i
     }
   }

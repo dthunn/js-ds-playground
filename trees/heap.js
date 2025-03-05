@@ -78,7 +78,7 @@ class Heap {
 
       if (maxIdx !== idx) {
         this.swap(idx, maxIdx)
-        idx = maxIdx
+        // idx = maxIdx
       } else {
         break
       }
