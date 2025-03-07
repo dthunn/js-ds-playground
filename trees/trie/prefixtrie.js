@@ -1,6 +1,6 @@
 class TrieNode {
   constructor() {
-    this.characters = []
+    this.characters = {}
     this.wordEnd = false
   }
 }

@@ -17,28 +17,48 @@
 //   return null
 // }
 
-const combinationSumTF = function (target, candidates, memo = new Map()) {
+const combinationSumList = function (target, candidates, memo = new Map()) {
   if (memo.has(target)) return memo.get(target)
-  if (target === 0) return true
-  if (target < 0) return false
+  if (target === 0) return []
+  if (target < 0) return null
 
-  for (let num of candidates) {
+  for (const num of candidates) {
     const remainder = target - num
+    const result = combinationSumList(remainder, candidates, memo)
 
-    if (combinationSumTF(remainder, candidates, memo)) {
-      memo.set(target, true)
-      return true
+    if (result) {
+      memo.set(target, [...result, num])
+      return [...result, num]
     }
   }
-  memo.set(target, false)
-  return false
+
+  memo.set(target, null)
+  return null
 }
 
-console.log(combinationSumTF(7, [2, 3]))
-console.log(combinationSumTF(7, [5, 3, 4, 7]))
-console.log(combinationSumTF(7, [2, 4]))
-console.log(combinationSumTF(8, [2, 3, 5]))
-console.log(combinationSumTF(300, [7, 14]))
+// const combinationSumTF = function (target, candidates, memo = new Map()) {
+//   if (memo.has(target)) return memo.get(target)
+//   if (target === 0) return true
+//   if (target < 0) return false
+
+//   for (let num of candidates) {
+//     const remainder = target - num
+
+//     if (combinationSumTF(remainder, candidates, memo)) {
+//       memo.set(target, true)
+//       return true
+//     }
+//   }
+
+//   memo.set(target, false)
+//   return false
+// }
+
+console.log(combinationSumList(7, [2, 3]))
+console.log(combinationSumList(7, [5, 3, 4, 7]))
+console.log(combinationSumList(7, [2, 4]))
+console.log(combinationSumList(8, [2, 3, 5]))
+console.log(combinationSumList(300, [7, 14]))
 
 // const bestSum = (targetSum, numbers, memo = new Map()) => {
 //   if (memo.has(targetSum)) return memo.get(targetSum)

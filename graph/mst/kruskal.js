@@ -62,9 +62,9 @@ console.log(uf.connected(4, 9))
 
 // ------------------------------------------------------------------
 
-let minCostConnectPoints = function (points) {
-  let n = points.length
-  let allEdges = []
+const minCostConnectPoints = function (points) {
+  const n = points.length
+  const allEdges = []
 
   for (let currNode = 0; currNode < n; currNode++) {
     for (let nextNode = currNode + 1; nextNode < n; nextNode++) {
@@ -97,7 +97,7 @@ let minCostConnectPoints = function (points) {
 
 // ------------------------------------------------------------------
 
-function minCostConnectPoints2(edges) {
+const minCostConnectPoints2 = function (edges) {
   const edgeList = []
 
   for (let sourceIndex = 0; sourceIndex < edges.length; sourceIndex++) {
