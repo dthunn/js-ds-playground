@@ -17,23 +17,19 @@
 //   return null
 // }
 
-const combinationSumList = function (target, candidates, memo = new Map()) {
-  if (memo.has(target)) return memo.get(target)
-  if (target === 0) return []
-  if (target < 0) return null
+const combinationSumListTab = function (target, candidates, memo = new Map()) {
+  const table = new Array(target + 1).fill(null)
+  table[0] = []
 
-  for (const num of candidates) {
-    const remainder = target - num
-    const result = combinationSumList(remainder, candidates, memo)
-
-    if (result) {
-      memo.set(target, [...result, num])
-      return [...result, num]
+  for (let i = 0; i <= target; i++) {
+    if (table[i]) {
+      for (const num of candidates) {
+        table[i + num] = [...table[i], num]
+      }
     }
   }
 
-  memo.set(target, null)
-  return null
+  return table[target]
 }
 
 // const combinationSumTF = function (target, candidates, memo = new Map()) {
@@ -54,11 +50,26 @@ const combinationSumList = function (target, candidates, memo = new Map()) {
 //   return false
 // }
 
-console.log(combinationSumList(7, [2, 3]))
-console.log(combinationSumList(7, [5, 3, 4, 7]))
-console.log(combinationSumList(7, [2, 4]))
-console.log(combinationSumList(8, [2, 3, 5]))
-console.log(combinationSumList(300, [7, 14]))
+// const combinationSumTFTab = function (target, candidates, memo = new Map()) {
+//   const table = new Array(target + 1).fill(false)
+//   table[0] = true
+
+//   for (let i = 0; i <= target; i++) {
+//     if (table[i]) {
+//       for (const num of candidates) {
+//         table[i + num] = true
+//       }
+//     }
+//   }
+
+//   return table[target]
+// }
+
+console.log(combinationSumListTab(7, [2, 3]))
+console.log(combinationSumListTab(7, [5, 3, 4, 7]))
+console.log(combinationSumListTab(7, [2, 4]))
+console.log(combinationSumListTab(8, [2, 3, 5]))
+console.log(combinationSumListTab(300, [7, 14]))
 
 // const bestSum = (targetSum, numbers, memo = new Map()) => {
 //   if (memo.has(targetSum)) return memo.get(targetSum)

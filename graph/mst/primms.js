@@ -40,7 +40,7 @@ let minCostConnectPoints = function (points) {
 
 // -----------------------------------------------------------------
 
-function primsAlgorithm(edges) {
+const primsAlgorithm = function (edges) {
   const heap = new Heap((a, b) => a[2] < b[2]) // Min heap based on edge weight
   const initialEdges = edges[0].map((edge) => [0, edge[0], edge[1]])
   heap.buildHeap(initialEdges)
