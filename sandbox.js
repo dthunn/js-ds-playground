@@ -1,58 +1,109 @@
-var orangesRotting = function (matrix) {
-  if (matrix.length === 0) return 0
+class Heap {
+  constructor(comparator = (a, b) => a < b) {
+    this.heap = []
+    this.comparator = comparator
+  }
 
-  const queue = []
-  let freshOranges = 0
+  isEmpty() {
+    return this.heap.length === 0
+  }
 
-  for (let row = 0; row < matrix.length; row++) {
-    for (let col = 0; col < matrix[0].length; col++) {
-      if (matrix[row][col] === ROTTEN) {
-        queue.push([row, col])
+  peek() {
+    return this.heap[0]
+  }
+
+  size() {
+    return this.heap.length
+  }
+
+  leftChild(idx) {
+    return idx * 2 + 1
+  }
+
+  rightChild(idx) {
+    return idx * 2 + 2
+  }
+
+  parent(idx) {
+    return Math.floor((idx - 1) / 2)
+  }
+
+  swap(i, j) {
+    ;[this.heap[i], this.heap[j]] = [this.heap[j], this.heap[i]]
+  }
+
+  compare(i, j) {
+    return this.comparator(this.heap[i], this.heap[j])
+  }
+
+  push(value) {
+    this.heap.push(value)
+    this.siftUp()
+  }
+
+  siftUp() {
+    let nodeIdx = this.size() - 1
+
+    while (0 < nodeIdx && this.compare(nodeIdx, this.parent(nodeIdx))) {
+      this.swap(nodeIdx, this.parent(nodeIdx))
+      nodeIdx = this.parent(nodeIdx)
+    }
+  }
+
+  pop() {
+    if (this.size() > 1) {
+      this.swap(0, this.size() - 1)
+    }
+
+    const value = this.heap.pop()
+    this.siftDown()
+
+    return value
+  }
+
+  siftDown(idx = 0) {
+    let maxIdx = 0
+
+    while (true) {
+      const leftIdx = this.leftChild(maxIdx)
+      const rightIdx = this.rightChild(maxIdx)
+
+      if (leftIdx < this.size() && this.compare(leftIdx, maxIdx)) {
+        maxIdx = leftIdx
       }
 
-      if (matrix[row][col] === FRESH) {
-        freshOranges++
+      if (rightIdx < this.size() && this.compare(rightIdx, maxIdx)) {
+        maxIdx = rightIdx
+      }
+
+      if (maxIdx !== idx) {
+        this.swap(idx, maxIdx)
+        idx = maxIdx
+      } else {
+        break
       }
     }
   }
 
-  let minutes = 0
-  let currentQueueSize = queue.length
+  buildHeap(array) {
+    this.heap = array
+    const parentIdx = this.parent(this.size() - 1)
 
-  while (queue.length) {
-    if (currentQueueSize === 0) {
-      currentQueueSize = queue.length
-      minutes++
-    }
-
-    const currentOrange = queue.shift()
-    currentQueueSize--
-    const [row, col] = currentOrange
-
-    for (let i = 0; i < directions.length; i++) {
-      const currentDir = directions[i]
-      const nextRow = row + currentDir[0]
-      const nextCol = col + currentDir[1]
-
-      if (
-        nextRow < 0 ||
-        nextRow >= matrix.length ||
-        nextCol < 0 ||
-        nextCol >= matrix[0].length
-      )
-        continue
-
-      if (matrix[nextRow][nextCol] === FRESH) {
-        matrix[nextRow][nextCol] = ROTTEN
-        freshOranges--
-        queue.push([nextRow, nextCol])
-      }
+    for (let i = parentIdx; i >= 0; i--) {
+      this.siftDown(i)
     }
   }
+}
 
-  if (freshOranges !== 0) {
-    return -1
-  }
+const heap = new Heap()
+heap.buildHeap([15, 12, 50, 7, 40, 22])
+// heap.push(15)
+// heap.push(12)
+// heap.push(50)
+// heap.push(7)
+// heap.push(40)
+// heap.push(22)
 
-  return minutes
+while (!heap.isEmpty()) {
+  console.log(heap.pop())
 }
