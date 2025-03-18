@@ -1,46 +1,70 @@
-const alienOrderBFS = function (words) {
-  const adjList = new Map()
-  const counts = new Map()
+function topKFrequent(nums, k) {
+  let count = new Map()
+  let unique = []
 
-  for (const word of words) {
-    for (const c of word) {
-      counts.set(c, 0)
-      adjList.set(c, [])
-    }
+  // Build the frequency map: number -> frequency
+  for (let num of nums) {
+    count.set(num, (count.get(num) || 0) + 1)
   }
 
-  for (let i = 0; i < words.length - 1; i++) {
-    let word1 = words[i]
-    let word2 = words[i + 1]
-    if (word1.length > word2.length && word1.startsWith(word2)) return ''
+  // Create an array of unique elements
+  unique = Array.from(count.keys())
 
-    for (let j = 0; j < Math.min(word1.length, word2.length); j++) {
-      if (word1[j] !== word2[j]) {
-        adjList.get(word1[j]).push(word2[j])
-        counts.set(word2[j], counts.get(word2[j]) + 1)
-        break
+  // Helper function to swap two elements in the unique array
+  function swap(a, b) {
+    let tmp = unique[a]
+    unique[a] = unique[b]
+    unique[b] = tmp
+  }
+
+  // Partition function for Quickselect
+  function partition(left, right, pivotIndex) {
+    let pivotFrequency = count.get(unique[pivotIndex])
+
+    // Move pivot to the end
+    swap(pivotIndex, right)
+    let storeIndex = left
+
+    // Move all less frequent elements to the left
+    for (let i = left; i <= right; i++) {
+      if (count.get(unique[i]) < pivotFrequency) {
+        swap(storeIndex, i)
+        storeIndex++
       }
     }
+
+    // Move the pivot to its final place
+    swap(storeIndex, right)
+
+    return storeIndex
   }
 
-  const sb = []
-  const queue = []
+  // Quickselect function
+  function quickselect(left, right, k) {
+    if (left === right) return
 
-  for (const [c, count] of counts.entries()) {
-    if (count === 0) queue.push(c)
-  }
+    // Select a random pivot index
+    let pivotIndex = left + Math.floor(Math.random() * (right - left))
 
-  while (queue.length) {
-    const c = queue.shift()
-    sb.push(c)
+    // Find the pivot position in the sorted list
+    pivotIndex = partition(left, right, pivotIndex)
 
-    for (const next of adjList.get(c)) {
-      counts.set(next, counts.get(next) - 1)
-
-      if (counts.get(next) === 0) queue.push(next)
+    // If the pivot is in its final sorted position
+    if (k === pivotIndex) {
+      return
+    } else if (k < pivotIndex) {
+      // Go left
+      quickselect(left, pivotIndex - 1, k)
+    } else {
+      // Go right
+      quickselect(pivotIndex + 1, right, k)
     }
   }
 
-  if (sb.length < counts.size) return ''
-  return sb.join('')
+  // Find the (n - k)th smallest element in the frequency list
+  let n = count.size
+  quickselect(0, n - 1, n - k)
+
+  // Return the top k frequent elements
+  return unique.slice(n - k)
 }
