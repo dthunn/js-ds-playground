@@ -1,50 +1,59 @@
-const topKFrequent = function (nums, k) {
-  const count = new Map()
+class UnionFind {
+  constructor(size) {
+    this.group = new Array(size).fill(0)
+    this.rank = new Array(size).fill(0)
+    this.size = size
 
-  for (const num of nums) {
-    count.set(num, (count.get(num) || 0) + 1)
+    for (let i = 0; i < size; i++) {
+      this.group[i] = i
+    }
   }
 
-  const unique = Array.from(count.keys())
-
-  const swap = function (a, b) {
-    const temp = unique[a]
-    unique[a] = unique[b]
-    unique[b] = temp
-  }
-
-  const partition = function (left, right, pivotIndex) {
-    const pivotFrequency = count.get(unique[pivotIndex])
-    let pivot = left
-    swap(pivotIndex, right)
-
-    for (let i = left; i <= right; i++) {
-      if (count.get(unique[i]) < pivotFrequency) {
-        swap(pivot, i)
-        pivot++
-      }
+  find(node) {
+    if (this.group[node] !== node) {
+      this.group[node] = this.find(this.group[node])
     }
 
-    swap(pivot, right)
-    return pivot
+    return this.group[node]
   }
 
-  const quickSelect = function (left, right, k) {
-    if (left === right) return
+  union(node1, node2) {
+    const group1 = this.find(node1)
+    const group2 = this.find(node2)
 
-    let pivotIndex = left + Math.floor(Math.random() * (right - left))
-    pivotIndex = partition(left, right, pivotIndex)
+    if (group1 === group2) return false
 
-    if (k === pivotIndex) return
-    if (k < pivotIndex) {
-      quickSelect(left, pivotIndex - 1, k)
+    if (this.rank[group1] > this.rank[group2]) {
+      this.group[group2] = group1
+    } else if (this.rank[group1] < this.rank[group2]) {
+      this.group[group1] = group2
     } else {
-      quickSelect(pivotIndex + 1, right, k)
+      this.group[group1] = group2
+      this.rank[group2]++
     }
+
+    this.size--
+    return true
   }
 
-  const n = count.size
-  quickSelect(0, n - 1, n - k)
-
-  return unique.slice(n - k)
+  connected(x, y) {
+    return this.find(x) === this.find(y)
+  }
 }
+
+const uf = new UnionFind(10)
+uf.union(1, 2)
+uf.union(2, 5)
+uf.union(5, 6)
+uf.union(6, 7)
+uf.union(3, 8)
+uf.union(8, 9)
+
+console.log(uf.group)
+
+console.log(uf.connected(1, 5))
+console.log(uf.connected(5, 7))
+console.log(uf.connected(4, 9))
+
+uf.union(9, 4)
+console.log(uf.connected(4, 9))
