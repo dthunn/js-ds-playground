@@ -1,113 +1,102 @@
-class DoublyLinkedList {
+class ListNode {
+  constructor(val) {
+    this.val = val
+    this.next = null
+    this.prev = null
+  }
+}
+
+class MyLinkedList {
   constructor() {
-    this.head = null
-    this.tail = null
+    this.size = 0
+    this.head = new ListNode(0) // sentinel head
+    this.tail = new ListNode(0) // sentinel tail
+    this.head.next = this.tail
+    this.tail.prev = this.head
   }
 
-  setHead(node) {
-    if (!this.head) {
-      this.head = node
-      this.tail = node
+  get(index) {
+    if (index < 0 || index >= this.size) return -1
 
-      return
-    }
-
-    this.insertBefore(this.head, node)
-  }
-
-  setTail(node) {
-    if (!this.tail) {
-      this.setHead(node)
-      return
-    }
-
-    this.insertAfter(this.tail, node)
-  }
-
-  insertBefore(node, nodeToInsert) {
-    if (this.head === nodeToInsert && this.tail === nodeToInsert) return
-    this.remove(nodeToInsert)
-
-    nodeToInsert.prev = node.prev
-    nodeToInsert.next = node
-
-    if (node.prev === null) {
-      this.head = nodeToInsert
+    let curr = null
+    if (index + 1 < this.size - index) {
+      curr = this.head
+      for (let i = 0; i < index + 1; i++) {
+        curr = curr.next
+      }
     } else {
-      node.prev.next = nodeToInsert
+      curr = this.tail
+      for (let i = 0; i < this.size - index; i++) {
+        curr = curr.prev
+      }
     }
 
-    node.prev = nodeToInsert
+    return curr.val
   }
 
-  insertAfter(node, nodeToInsert) {
-    if (this.head === nodeToInsert && this.tail === nodeToInsert) return
-    this.remove(nodeToInsert)
+  addAtHead(val) {
+    const pred = this.head
+    const succ = this.head.next
 
-    nodeToInsert.next = node.next
-    nodeToInsert.prev = node
+    this.size++
+    const newNode = new ListNode(val)
+    newNode.prev = pred
+    newNode.next = succ
+    pred.next = newNode
+    succ.prev = newNode
+  }
 
-    if (!node.next) {
-      this.tail = nodeToInsert
+  addAtTail(val) {
+    const succ = this.tail
+    const pred = this.tail.prev
+
+    this.size++
+    const newNode = new ListNode(val)
+    newNode.prev = pred
+    newNode.next = succ
+    pred.next = newNode
+    succ.prev = newNode
+  }
+
+  addAtIndex(index, val) {
+    if (index > this.size) return
+    if (index < 0) index = 0
+
+    let pred, succ
+    if (index < this.size - index) {
+      pred = this.head
+      for (let i = 0; i < index; i++) pred = pred.next
+      succ = pred.next
     } else {
-      node.next.prev = nodeToInsert
+      succ = this.tail
+      for (let i = 0; i < this.size - index; i++) succ = succ.prev
+      pred = succ.prev
     }
 
-    node.next = nodeToInsert
+    this.size++
+    const newNode = new ListNode(val)
+    newNode.prev = pred
+    newNode.next = succ
+    pred.next = newNode
+    succ.prev = newNode
   }
 
-  insertAtPosition(position, nodeToInsert) {
-    if (position === 0) {
-      this.setHead(nodeToInsert)
-      return
-    }
+  deleteAtIndex(index) {
+    if (index < 0 || index >= this.size) return
 
-    let node = this.head
-    let counter = 1
-
-    while (node && counter !== position) {
-      node = node.next
-      counter++
-    }
-
-    if (node) {
-      this.insertBefore(node, nodeToInsert)
+    let pred, succ
+    if (index < this.size - index) {
+      pred = this.head
+      for (let i = 0; i < index; i++) pred = pred.next
+      succ = pred.next.next
     } else {
-      this.setTail(nodeToInsert)
+      succ = this.tail
+      for (let i = 0; i < this.size - index - 1; i++) succ = succ.prev
+      pred = succ.prev.prev
     }
-  }
 
-  removeNodesWithValue(value) {
-    let node = this.head
-
-    while (node) {
-      const currentNode = node
-      node = node.next
-
-      if (currentNode.value === value) this.remove(currentNode)
-    }
-  }
-
-  remove(node) {
-    if (this.head === node) this.head = this.head.next
-    if (this.tail === node) this.tail = this.tail.prev
-
-    this.removeNodeBindings(node)
-  }
-
-  containsNodeWithValue(value) {
-    let node = this.head
-
-    while (node && node.value !== value) node = node.next
-
-    return node !== null
-  }
-
-  removeNodeBindings(node) {
-    if (node.prev) node.prev.next = node.next
-    if (node.next) node.next.prev = node.prev
-
-    node.next = null
-    node.prev = null
+    this.size--
+    pred.next = succ
+    succ.prev = pred
   }
 }

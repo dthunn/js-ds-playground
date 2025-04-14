@@ -1,59 +1,45 @@
-class UnionFind {
-  constructor(size) {
-    this.group = new Array(size).fill(0)
-    this.rank = new Array(size).fill(0)
-    this.size = size
+const dummyMatrix = [
+  [1, 2, 3, 4, 5],
+  [6, 7, 8, 9, 10],
+  [11, 12, 13, 14, 15],
+  [16, 17, 18, 19, 20],
+]
 
-    for (let i = 0; i < size; i++) {
-      this.group[i] = i
-    }
+const directions = [
+  [-1, 0], // up
+  [0, 1], //right
+  [1, 0], //down
+  [0, -1], // left
+]
+
+const traversal = function (matrix) {
+  const seen = new Array(matrix.length)
+    .fill(0)
+    .map(() => new Array(matrix[0].length).fill(0))
+
+  const values = []
+  dfs(matrix, 0, 0, seen, values)
+
+  return values
+}
+
+const dfs = function (matrix, row, col, seen, values) {
+  if (
+    row < 0 ||
+    row >= matrix.length ||
+    col < 0 ||
+    col >= matrix[0].length ||
+    seen[row][col]
+  ) {
+    return
   }
 
-  find(node) {
-    if (this.group[node] !== node) {
-      this.group[node] = this.find(this.group[node])
-    }
+  seen[row][col] = true
+  values.push(matrix[row][col])
 
-    return this.group[node]
-  }
-
-  union(node1, node2) {
-    const group1 = this.find(node1)
-    const group2 = this.find(node2)
-
-    if (group1 === group2) return false
-
-    if (this.rank[group1] > this.rank[group2]) {
-      this.group[group2] = group1
-    } else if (this.rank[group1] < this.rank[group2]) {
-      this.group[group1] = group2
-    } else {
-      this.group[group1] = group2
-      this.rank[group2]++
-    }
-
-    this.size--
-    return true
-  }
-
-  connected(x, y) {
-    return this.find(x) === this.find(y)
+  for (const dir of directions) {
+    dfs(matrix, row + dir[0], col + dir[1], seen, values)
   }
 }
 
-const uf = new UnionFind(10)
-uf.union(1, 2)
-uf.union(2, 5)
-uf.union(5, 6)
-uf.union(6, 7)
-uf.union(3, 8)
-uf.union(8, 9)
-
-console.log(uf.group)
-
-console.log(uf.connected(1, 5))
-console.log(uf.connected(5, 7))
-console.log(uf.connected(4, 9))
-
-uf.union(9, 4)
-console.log(uf.connected(4, 9))
+console.log(traversal(dummyMatrix))
