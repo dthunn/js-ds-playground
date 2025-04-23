@@ -9,8 +9,8 @@ class ListNode {
 class MyLinkedList {
   constructor() {
     this.size = 0
-    this.head = new ListNode(0) // sentinel head
-    this.tail = new ListNode(0) // sentinel tail
+    this.head = new ListNode(0)
+    this.tail = new ListNode(0)
     this.head.next = this.tail
     this.tail.prev = this.head
   }
@@ -19,9 +19,9 @@ class MyLinkedList {
     if (index < 0 || index >= this.size) return -1
 
     let curr = null
-    if (index + 1 < this.size - index) {
+    if (index <= this.size - index) {
       curr = this.head
-      for (let i = 0; i < index + 1; i++) {
+      for (let i = 0; i <= index; i++) {
         curr = curr.next
       }
     } else {
