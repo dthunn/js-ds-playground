@@ -1,15 +1,60 @@
-const n = cost.length
+class UnionFind {
+  constructor(size) {
+    this.group = new Array(size).fill(0)
+    this.rank = new Array(size).fill(0)
+    this.size = size
 
-if (n === 0) return 0
-if (n === 1) return cost[0]
+    for (let i = 0; i < size; i++) {
+      this.group[i] = i
+    }
+  }
 
-let dpOne = cost[0]
-let dpTwo = cost[1]
+  find(node) {
+    if (this.group[node] !== node) {
+      this.group[node] = this.find(this.group[node])
+    }
 
-for (let i = 2; i < n; i++) {
-  const current = cost[i] + Math.min(dpOne, dpTwo)
-  dpOne = dpTwo
-  dpTwo = current
+    return this.group[node]
+  }
+
+  union(node1, node2) {
+    const group1 = this.find(node1)
+    const group2 = this.find(node2)
+
+    if (group1 === group2) return false
+
+    if (this.rank[group1] > this.rank[group2]) {
+      this.group[group2] = group1
+    } else if (this.rank[group1] < this.rank[group2]) {
+      this.group[group2] = group1
+    } else {
+      this.group[group1] = group2
+      this.rank[group2]++
+    }
+
+    this.size--
+
+    return true
+  }
+
+  connected(x, y) {
+    return this.find(x) === this.find(y)
+  }
 }
 
-return Math.min(dpOne, dpTwo)
+const uf = new UnionFind(10)
+uf.union(1, 2)
+uf.union(2, 5)
+uf.union(5, 6)
+uf.union(6, 7)
+uf.union(3, 8)
+uf.union(8, 9)
+
+console.log(uf.group)
+
+console.log(uf.connected(1, 5))
+console.log(uf.connected(5, 7))
+console.log(uf.connected(4, 9))
+
+uf.union(9, 4)
+console.log(uf.connected(4, 9))
