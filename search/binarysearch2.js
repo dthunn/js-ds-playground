@@ -5,7 +5,6 @@ function binarySearch(nums, target) {
   let right = nums.length - 1
 
   while (left < right) {
-    // Prevent (left + right) overflow
     const mid = left + Math.floor((right - left) / 2)
     if (nums[mid] === target) {
       return mid
