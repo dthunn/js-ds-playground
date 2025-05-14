@@ -5,7 +5,7 @@ function binarySearch(nums, target) {
   let right = nums.length - 1
 
   while (left + 1 < right) {
-    let mid = left + Math.floor((right - left) / 2)
+    const mid = left + Math.floor((right - left) / 2) // prevent overflow
     if (nums[mid] === target) {
       return mid
     } else if (nums[mid] < target) {
@@ -15,7 +15,7 @@ function binarySearch(nums, target) {
     }
   }
 
-  // Post-processing to check the remaining two elements
+  // Post-processing: check the remaining two elements
   if (nums[left] === target) return left
   if (nums[right] === target) return right
 
