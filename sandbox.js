@@ -1,21 +1,10 @@
-var solution = function (isBadVersion) {
-  /**
-   * @param {integer} n Total versions
-   * @return {integer} The first bad version
-   */
-  return function (n) {
-    let left = 1
-    let right = n
+var moveZeroes = function (nums) {
+  let left = 0
 
-    while (left < right) {
-      const mid = left + Math.floor((right - left) / 2)
-
-      if (isBadVersion(mid)) {
-        right = mid
-      } else {
-        left = mid + 1
-      }
+  for (let right = 0; right < nums.length; right++) {
+    if (nums[right] !== 0) {
+      ;[nums[left], nums[right]] = [nums[right], nums[left]]
+      left++
     }
-    return left
   }
 }
