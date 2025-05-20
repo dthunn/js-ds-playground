@@ -1,21 +1,19 @@
-function isAnagram(s, t) {
-  if (s.length !== t.length) {
-    return false
+var removeNthFromEnd = function (head, n) {
+  let slow = head
+  let fast = head
+
+  for (let i = 1; i <= n; i++) {
+    fast = fast.next
   }
 
-  const table = new Array(26).fill(0)
+  if (!fast) return head.next
 
-  for (let i = 0; i < s.length; i++) {
-    table[s.charCodeAt(i) - 'a'.charCodeAt(0)]++
+  while (fast.next) {
+    slow = slow.next
+    fast = fast.next
   }
 
-  for (let i = 0; i < t.length; i++) {
-    const index = t.charCodeAt(i) - 'a'.charCodeAt(0)
-    table[index]--
-    if (table[index] < 0) {
-      return false
-    }
-  }
+  slow.next = slow.next.next
 
-  return true
+  return head
 }
