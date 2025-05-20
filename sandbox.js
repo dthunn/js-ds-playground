@@ -1,19 +1,20 @@
-var removeNthFromEnd = function (head, n) {
-  let slow = head
-  let fast = head
+var mergeTwoLists = function (list1, list2) {
+  const newList = new ListNode(0)
+  let node = newList
 
-  for (let i = 1; i <= n; i++) {
-    fast = fast.next
+  while (list1 && list2) {
+    if (list1.val <= list2.val) {
+      node.next = list1
+      list1 = list1.next
+    } else {
+      node.next = list2
+      list2 = list2.next
+    }
+
+    node = node.next
   }
 
-  if (!fast) return head.next
+  node.next = list1 || list2
 
-  while (fast.next) {
-    slow = slow.next
-    fast = fast.next
-  }
-
-  slow.next = slow.next.next
-
-  return head
+  return newList.next
 }
