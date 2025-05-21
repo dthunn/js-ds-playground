@@ -1,20 +1,26 @@
-var mergeTwoLists = function (list1, list2) {
-  const newList = new ListNode(0)
-  let node = newList
+var maxDepth = function (root) {
+  if (!root) return 0
 
-  while (list1 && list2) {
-    if (list1.val <= list2.val) {
-      node.next = list1
-      list1 = list1.next
-    } else {
-      node.next = list2
-      list2 = list2.next
-    }
+  const leftHeight = maxDepth(root.left)
+  const rightHeight = maxDepth(root.right)
 
-    node = node.next
+  return 1 + Math.max(leftHeight, rightHeight)
+}
+
+var diameterOfBinaryTree = function (root) {
+  let diameter = 0
+
+  const helper = function (node) {
+    if (!node) return 0
+
+    const leftHeight = helper(node.left)
+    const rightHeight = helper(node.right)
+
+    diamater = Math.max(diameter, leftHeight + rightHeight)
+
+    return 1 + Math.max(leftHeight, rightHeight)
   }
 
-  node.next = list1 || list2
-
-  return newList.next
+  helper(root)
+  return diamater
 }
