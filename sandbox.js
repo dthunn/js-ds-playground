@@ -1,34 +1,20 @@
-var findMedianSortedArrays = function (nums1, nums2) {
-  if (nums1.length > nums2.length) [nums1, nums2] = [nums2, nums1]
+var addTwoNumbers = function (l1, l2) {
+  const sentinel = new ListNode(0)
+  let curr = sentinel
+  let carry = 0
 
-  const m = nums1.length,
-    n = nums2.length
-  let left = 0,
-    right = m
+  while (l1 || l2 || carry) {
+    const x = l1 ? l1.val : 0
+    const y = l2 ? l2.val : 0
+    const sum = carry + x + y
 
-  while (left <= right) {
-    const pA = Math.floor((left + right) / 2)
-    const pB = Math.floor((m + n + 1) / 2 - pA)
+    carry = Math.floor(sum / 10)
+    curr.next = new ListNode(sum % 10)
+    curr = curr.next
 
-    const maxLeftA = pA === 0 ? -Infinity : nums1[pA - 1]
-    const minRightA = pA === m ? Infinity : nums1[pA]
-    const maxLeftB = pB === 0 ? -Infinity : nums2[pB - 1]
-    const minRightB = pB === n ? Infinity : nums2[pB]
-
-    if (maxLeftA <= minRightB && maxLeftB <= minRightA) {
-      if ((m + n) % 2 === 0) {
-        return (
-          (Math.max(maxLeftA, maxLeftB) + Math.min(minRightA, minRightB)) / 2
-        )
-      } else {
-        return Math.max(maxLeftA, maxLeftB)
-      }
-    } else if (maxLeftA > minRightB) {
-      right = pA - 1
-    } else {
-      left = pA + 1
-    }
+    if (l1) l1 = l1.next
+    if (l2) l2 = l2.next
   }
 
-  return -1
+  return sentinel.next
 }
