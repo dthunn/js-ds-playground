@@ -1,20 +1,21 @@
-var addTwoNumbers = function (l1, l2) {
-  const sentinel = new ListNode(0)
-  let curr = sentinel
-  let carry = 0
+function kthSmallest(root, k) {
+  const stack = []
 
-  while (l1 || l2 || carry) {
-    const x = l1 ? l1.val : 0
-    const y = l2 ? l2.val : 0
-    const sum = carry + x + y
+  while (true) {
+    // Traverse the left subtree
+    while (root) {
+      stack.push(root)
+      root = root.left
+    }
 
-    carry = Math.floor(sum / 10)
-    curr.next = new ListNode(sum % 10)
-    curr = curr.next
+    // Process the node
+    root = stack.pop()
+    k--
+    if (k === 0) {
+      return root.val
+    }
 
-    if (l1) l1 = l1.next
-    if (l2) l2 = l2.next
+    // Traverse the right subtree
+    root = root.right
   }
-
-  return sentinel.next
 }
