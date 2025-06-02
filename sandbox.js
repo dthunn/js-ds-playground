@@ -1,28 +1,11 @@
-var canFinish = function (numCourses, prerequisites) {
-  const inDegree = new Array(numCourses).fill(0)
-  const adjList = inDegree.map(() => [])
+const insertIntoBST = function (root, val) {
+  if (!root) return new TreeNode(val)
 
-  for (const [course, prereq] of prerequisites) {
-    inDegree[course]++
-    adjList[prereq].push(course)
+  if (val > root.val) {
+    root.right = insertIntoBST(root.right, val)
+  } else {
+    root.left = insertIntoBST(root.left, val)
   }
 
-  const stack = []
-  let count = 0
-
-  for (let i = 0; i < inDegree.length; i++) {
-    if (inDegree[i] === 0) stack.push(i)
-  }
-
-  while (stack.length) {
-    const current = stack.pop()
-    count++
-
-    for (const next of adjList[current]) {
-      inDegree[next]--
-      if (inDegree[next] === 0) stack.push(next)
-    }
-  }
-
-  return count === numCourses
+  return root
 }
