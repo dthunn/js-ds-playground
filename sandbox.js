@@ -1,17 +1,26 @@
-var fizzBuzz = function (n) {
-  const ans = []
+var search = function (nums, target) {
+  const n = nums.length
+  let left = 0,
+    right = n - 1
 
-  for (let i = 1; i <= n; i++) {
-    if (i % 3 === 0 && i % 5 === 0) {
-      ans.push('FizzBuzz')
-    } else if (i % 3 === 0) {
-      ans.push('Fizz')
-    } else if (i % 5 === 0) {
-      ans.push('Buzz')
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    if (nums[mid] === target) return mid
+
+    if (nums[left] <= nums[mid]) {
+      if (nums[left] <= target && target < nums[mid]) {
+        right = mid - 1
+      } else {
+        left = mid + 1
+      }
     } else {
-      ans.push(i.toString())
+      if (nums[mid] < target && target <= nums[right]) {
+        left = mid + 1
+      } else {
+        right = mid - 1
+      }
     }
   }
 
-  return ans
+  return -1
 }
