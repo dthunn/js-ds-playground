@@ -1,26 +1,8 @@
-var search = function (nums, target) {
-  const n = nums.length
-  let left = 0,
-    right = n - 1
+var maxDepth = function (root) {
+  if (!root) return 0
 
-  while (left <= right) {
-    const mid = Math.floor((left + right) / 2)
-    if (nums[mid] === target) return mid
+  const leftHeight = maxDepth(root.left)
+  const rightHeight = maxDepth(root.right)
 
-    if (nums[left] <= nums[mid]) {
-      if (nums[left] <= target && target < nums[mid]) {
-        right = mid - 1
-      } else {
-        left = mid + 1
-      }
-    } else {
-      if (nums[mid] < target && target <= nums[right]) {
-        left = mid + 1
-      } else {
-        right = mid - 1
-      }
-    }
-  }
-
-  return -1
+  return 1 + Math.max(leftHeight, rightHeight)
 }
