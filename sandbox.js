@@ -1,8 +1,18 @@
-var maxDepth = function (root) {
-  if (!root) return 0
+const subarraySum5 = function (nums, k) {
+  const sumMap = new Map()
+  sumMap.set(0, 1)
+  let count = 0
+  let runningSum = 0
 
-  const leftHeight = maxDepth(root.left)
-  const rightHeight = maxDepth(root.right)
+  for (const num of nums) {
+    runningSum += num
 
-  return 1 + Math.max(leftHeight, rightHeight)
+    if (sumMap.has(runningSum - k)) {
+      count += sumMap.get(runningSum - k)
+    }
+
+    sumMap.set(runningSum, (sumMap.get(runningSum) || 0) + 1)
+  }
+
+  return count
 }
