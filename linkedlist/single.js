@@ -5,7 +5,7 @@ class ListNode {
   }
 }
 
-class SingleLinkedList {
+class MyLinkedList {
   constructor() {
     this.size = 0
     this.head = new ListNode(0)
@@ -15,9 +15,7 @@ class SingleLinkedList {
     if (index < 0 || index >= this.size) return -1
 
     let curr = this.head
-    for (let i = 0; i <= index; i++) {
-      curr = curr.next
-    }
+    for (let i = 0; i <= index; i++) curr = curr.next
 
     return curr.val
   }
@@ -36,9 +34,7 @@ class SingleLinkedList {
 
     this.size++
     let prev = this.head
-    for (let i = 0; i < index; i++) {
-      prev = prev.next
-    }
+    for (let i = 0; i < index; i++) prev = prev.next
 
     const newNode = new ListNode(val)
     newNode.next = prev.next
@@ -50,9 +46,7 @@ class SingleLinkedList {
 
     this.size--
     let prev = this.head
-    for (let i = 0; i < index; i++) {
-      prev = prev.next
-    }
+    for (let i = 0; i < index; i++) prev = prev.next
 
     prev.next = prev.next.next
   }
