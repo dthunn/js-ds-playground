@@ -1,59 +1,19 @@
-class UnionFind {
-  constructor(size) {
-    this.group = new Array(size).fill(0)
-    this.rank = new Array(size).fill(0)
-    this.size = size
+function binarySearch(array, target) {
+  let left = 0
+  let right = array.length - 1
 
-    for (let i = 0; i < size; i++) {
-      this.group[i] = i
+  while (left <= right) {
+    const mid = Math.floor((left + right) / 2)
+    const foundVal = array[mid]
+
+    if (foundVal === target) {
+      return mid
+    } else if (target < foundVal) {
+      right = mid - 1
+    } else if (target > foundVal) {
+      left = mid + 1
     }
   }
 
-  find(node) {
-    if (this.group[node] !== node) {
-      this.group[node] = this.find(this.group[node])
-    }
-    return this.group[node]
-  }
-
-  union(node1, node2) {
-    const group1 = this.find(node1)
-    const group2 = this.find(node2)
-
-    if (group1 === group2) return false
-
-    if (this.rank[group1] > this.rank[group2]) {
-      this.group[group2] = group1
-    } else if (this.rank[group1] < this.rank[group2]) {
-      this.group[group1] = group2
-    } else {
-      this.group[group1] = group2
-      this.rank[group2]++
-    }
-
-    this.size--
-
-    return true
-  }
-
-  connected(x, y) {
-    return this.find(x) === this.find(y)
-  }
+  return -1
 }
-
-const uf = new UnionFind(10)
-uf.union(1, 2)
-uf.union(2, 5)
-uf.union(5, 6)
-uf.union(6, 7)
-uf.union(3, 8)
-uf.union(8, 9)
-
-console.log(uf.group)
-
-console.log(uf.connected(1, 5))
-console.log(uf.connected(5, 7))
-console.log(uf.connected(4, 9))
-
-uf.union(9, 4)
-console.log(uf.connected(4, 9))
