@@ -1,45 +1,48 @@
-const dummyMatrix = [
-  [1, 2, 3, 4],
-  [5, 6, 7, 8],
-  [9, 10, 11, 12],
-  [13, 14, 15, 16],
-]
+var orangesRotting = function (matrix) {
+  if (!matrix.length) return 0
 
-const directions = [
-  [-1, 0],
-  [0, 1],
-  [1, 0],
-  [0, -1],
-]
+  const queue = []
+  let freshOranges = 0
 
-const bfs = function (matrix) {
-  const seen = new Array(matrix.length)
-    .fill(0)
-    .map(() => new Array(matrix[0].length).fill(0))
+  for (let row = 0; row < matrix.length; row++) {
+    for (let col = 0; col < matrix[0].length; col++) {
+      if (matrix[row][col] === ROTTEN) queue.push([row, col])
+      if (matrix[row][col] === FRESH) freshOranges++
+    }
+  }
 
-  const values = []
-  const queue = [[0, 0]]
+  let minutes = 0
+  let currentQueueSize = queue.length
 
   while (queue.length) {
+    if (currentQueueSize === 0) {
+      currentQueueSize = queue.length
+      minutes++
+    }
+
     const [row, col] = queue.shift()
+    currentQueueSize--
 
-    if (
-      row >= 0 &&
-      col >= 0 &&
-      row < matrix.length &&
-      col < matrix[0].length &&
-      !seen[row][col]
-    ) {
-      seen[row][col] = true
-      values.push(matrix[row][col])
+    for (const [dr, dc] of directions) {
+      const nextRow = row + dr
+      const nextCol = col + dc
 
-      for (const [dr, dc] of directions) {
-        queue.push([row + dr, col + dc])
+      if (
+        nextRow < 0 ||
+        nextCol < 0 ||
+        nextRow >= matrix.length ||
+        nextCol >= matrix[0].length
+      )
+        continue
+
+      if (matrix[nextRow][nextCol] === FRESH) {
+        matrix[nextRow][nextCol] = ROTTEN
+        freshOranges--
+        queue.push([nextRow, nextCol])
       }
     }
   }
 
-  return values
+  if (freshOranges !== 0) return -1
+  return minutes
 }
-
-console.log(bfs(dummyMatrix))
