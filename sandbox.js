@@ -1,13 +1,19 @@
-var reverseList = function (head) {
-  let prev = null
-  let current = head
+var mergeTwoLists = function (list1, list2) {
+  const newList = new ListNode(0)
+  let node = newList
 
-  while (current) {
-    const temp = current.next
-    current.next = prev
-    prev = current
-    current = temp
+  while (list1 && list2) {
+    if (list1.val <= list2.val) {
+      node.next = list1
+      list1 = list1.next
+    } else {
+      node.next = list2
+      list2 = list2.next
+    }
+    node = node.next
   }
 
-  return prev
+  node.next = list1 || list2
+
+  return newList.next
 }
