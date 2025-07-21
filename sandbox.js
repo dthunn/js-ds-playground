@@ -1,18 +1,13 @@
-const subarraySum = function (nums, k) {
-  const sumMap = new Map()
-  sumMap.set(0, 1)
-  let count = 0
-  let runningSum = 0
+var reverseList = function (head) {
+  let prev = null
+  let current = head
 
-  for (const num of nums) {
-    runningSum += num
-
-    if (sumMap.has(runningSum - k)) {
-      count += sumMap.get(runningSum - k)
-    }
-
-    sumMap.set(runningSum, (sumMap.get(runningSum) || 0) + 1)
+  while (current) {
+    const temp = current.next
+    current.next = prev
+    prev = current
+    current = temp
   }
 
-  return count
+  return prev
 }
