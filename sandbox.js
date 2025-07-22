@@ -1,19 +1,45 @@
-var mergeTwoLists = function (list1, list2) {
-  const newList = new ListNode(0)
-  let node = newList
+const dummyMatrix = [
+  [1, 2, 3, 4],
+  [5, 6, 7, 8],
+  [9, 10, 11, 12],
+  [13, 14, 15, 16],
+]
 
-  while (list1 && list2) {
-    if (list1.val <= list2.val) {
-      node.next = list1
-      list1 = list1.next
-    } else {
-      node.next = list2
-      list2 = list2.next
+const directions = [
+  [-1, 0],
+  [0, 1],
+  [1, 0],
+  [0, -1],
+]
+
+const bfs = function (matrix) {
+  const seen = new Array(matrix.length)
+    .fill(0)
+    .map(() => new Array(matrix[0].length).fill(false))
+
+  const values = []
+  const queue = [[0, 0]]
+
+  while (queue.length) {
+    const [row, col] = queue.shift()
+
+    if (
+      row >= 0 &&
+      col >= 0 &&
+      row < matrix.length &&
+      col < matrix[0].length &&
+      !seen[row][col]
+    ) {
+      seen[row][col] = true
+      values.push(matrix[row][col])
+
+      for (const [dr, dc] of directions) {
+        queue.push([row + dr, col + dc])
+      }
     }
-    node = node.next
   }
 
-  node.next = list1 || list2
-
-  return newList.next
+  return values
 }
+
+console.log(bfs(dummyMatrix))
