@@ -1,45 +1,40 @@
-const dummyMatrix = [
-  [1, 2, 3, 4],
-  [5, 6, 7, 8],
-  [9, 10, 11, 12],
-  [13, 14, 15, 16],
-]
+const shortestPathBinaryMatrix = function (grid) {
+  if (grid[0][0] !== 0 || grid[grid.length - 1][grid[0].length - 1] !== 0)
+    return -1
 
-const directions = [
-  [-1, 0],
-  [0, 1],
-  [1, 0],
-  [0, -1],
-]
-
-const bfs = function (matrix) {
-  const seen = new Array(matrix.length)
-    .fill(0)
-    .map(() => new Array(matrix[0].length).fill(false))
-
-  const values = []
+  const n = grid.length
+  const visited = new Array(n).fill(0).map(() => new Array(n).fill(false))
   const queue = [[0, 0]]
+  visited[0][0] = true
+  let currentDistance = 1
 
   while (queue.length) {
-    const [row, col] = queue.shift()
+    const nodesSize = queue.length
 
-    if (
-      row >= 0 &&
-      col >= 0 &&
-      row < matrix.length &&
-      col < matrix[0].length &&
-      !seen[row][col]
-    ) {
-      seen[row][col] = true
-      values.push(matrix[row][col])
+    for (let i = 0; i < nodesSize; i++) {
+      const [row, col] = queue.shift()
+      if (row === n - 1 && col === n - 1) return currentDistance
 
       for (const [dr, dc] of directions) {
-        queue.push([row + dr, col + dc])
+        const newRow = row + dr
+        const newCol = col + dc
+
+        if (
+          newRow >= 0 &&
+          newCol >= 0 &&
+          newRow < n &&
+          newCol < n &&
+          grid[newRow][newCol] === 0 &&
+          !visited[newRow][newCol]
+        ) {
+          visited[newRow][newCol] = true
+          queue.push([newRow, newCol])
+        }
       }
     }
+
+    currentDistance++
   }
 
-  return values
+  return -1
 }
-
-console.log(bfs(dummyMatrix))
