@@ -12,7 +12,7 @@ const adjacencyList = [
 
 const bfs = function (graph) {
   const queue = [0]
-  const seen = []
+  const seen = new Array(graph.length)
   const values = []
 
   while (queue.length) {
