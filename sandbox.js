@@ -1,20 +1,16 @@
-const combinationSum = function (candidates, target) {
-  const combinations = []
+var lengthOfLongestSubstring = function (s) {
+  let charToNextIndex = new Map()
+  let maxLen = 0
+  let left = 0
 
-  const backtrack = function (remain, start, path) {
-    if (remain < 0) return
-    if (remain === 0) {
-      combinations.push([...path])
-      return
+  for (let right = 0; right < s.length; right++) {
+    if (charToNextIndex.has(s[right])) {
+      left = Math.max(charToNextIndex.get(s[right]), left)
     }
 
-    for (let i = start; i < candidations.length; i++) {
-      path.push(candidates[i])
-      backtrack(remain - candidates[i], i, path)
-      path.pop()
-    }
+    maxLen = Math.max(maxLen, right - left + 1)
+    charToNextIndex.set(s[right], right + 1)
   }
 
-  backtrack(target, 0, [])
-  return combinations
+  return maxLen
 }
